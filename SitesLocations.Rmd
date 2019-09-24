@@ -1,0 +1,50 @@
+---
+title: "SitesLocations"
+author: "Allan Kavuma"
+date: "23 September 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Import Libraries
+```{r LoadLibraries, echo=FALSE, message=FALSE, warning=FALSE}
+library(leaflet) ## Creating leaftlet map
+library(xlsx) ## For reading excel file
+library(dplyr) ## For data manipulation
+```
+
+## Read the data
+```{r LoadData, echo=FALSE, message=FALSE, warning=FALSE}
+## Read the site data
+sitedata <- read.xlsx("SitesLocations.xls", sheetName = "UserData")
+```
+
+## Clean the data
+```{r CleanData, echo=FALSE, message=FALSE, warning=FALSE}
+## Select the rows for the Latitudes, Longitudes and Region
+siteLocations <- sitedata[,c("ATC.Site.Name", "Sub.Region", 
+                             "LATITUDE.DECIMAL", "LONGITUDE.DECIMAL")]
+
+## Remove missing values data
+siteLocations <- na.omit(siteLocations)
+# Check if all missing values are removed
+#table(is.na(siteLocations))
+# Check the structure of the data frame
+#str(siteLocations)
+# Change Name variable from Factor to character type
+siteLocations$ATC.Site.Name <- as.character(siteLocations$ATC.Site.Name)
+## Remove wrong value of Mutara_House
+siteLocations <- siteLocations[!(siteLocations$ATC.Site.Name == c("Mutara_House")),]
+
+```
+
+## Plot the map
+```{r PlotMap, message=FALSE, warning=FALSE}
+## Plot map according to the regions of the sites
+leaflet(siteLocations) %>% addTiles() %>% addMarkers(lat = siteLocations$LATITUDE.DECIMAL, lng = siteLocations$LONGITUDE.DECIMAL, popup = siteLocations$ATC.Site.Name, clusterOptions = markerClusterOptions())
+
+
+```
