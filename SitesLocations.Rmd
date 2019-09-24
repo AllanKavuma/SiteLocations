@@ -9,21 +9,24 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Import Libraries
+
 ```{r LoadLibraries, echo=FALSE, message=FALSE, warning=FALSE}
+## Import Libraries
 library(leaflet) ## Creating leaftlet map
 library(xlsx) ## For reading excel file
 library(dplyr) ## For data manipulation
 ```
 
-## Read the data
+
 ```{r LoadData, echo=FALSE, message=FALSE, warning=FALSE}
+## Read the data
 ## Read the site data
 sitedata <- read.xlsx("SitesLocations.xls", sheetName = "UserData")
 ```
 
-## Clean the data
+
 ```{r CleanData, echo=FALSE, message=FALSE, warning=FALSE}
+## Clean the data
 ## Select the rows for the Latitudes, Longitudes and Region
 siteLocations <- sitedata[,c("ATC.Site.Name", "Sub.Region", 
                              "LATITUDE.DECIMAL", "LONGITUDE.DECIMAL")]
@@ -41,7 +44,7 @@ siteLocations <- siteLocations[!(siteLocations$ATC.Site.Name == c("Mutara_House"
 
 ```
 
-## Plot the map
+## Plot of the map
 ```{r PlotMap, message=FALSE, warning=FALSE}
 ## Plot map according to the regions of the sites
 leaflet(siteLocations) %>% addTiles() %>% addMarkers(lat = siteLocations$LATITUDE.DECIMAL, lng = siteLocations$LONGITUDE.DECIMAL, popup = siteLocations$ATC.Site.Name, clusterOptions = markerClusterOptions())
