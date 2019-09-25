@@ -45,7 +45,7 @@ siteLocations <- siteLocations[!(siteLocations$ATC.Site.Name == c("Mutara_House"
 ```
 
 
-```{r PlotMap, message=FALSE, warning=FALSE}
+```{r PlotMap, echo = FALSE, message=FALSE, warning=FALSE}
 ## Plot the map
 ## Plot map according to the regions of the sites
 leaflet(siteLocations) %>% addTiles() %>% addMarkers(lat = siteLocations$LATITUDE.DECIMAL, lng = siteLocations$LONGITUDE.DECIMAL, popup = siteLocations$ATC.Site.Name, clusterOptions = markerClusterOptions())
